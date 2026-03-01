@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "New Lab Result";
+}
+
+<div class="card shadow-sm border-0 rounded-3" style="max-width:700px;">
+    <div class="card-header text-white fw-bold py-3" style="background:#006064;">
+        <i class="fas fa-flask me-2"></i> Enter Lab Result
+    </div>
+    <div class="card-body p-4">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Patient *</label>
+                    <select name="PatientId" class="form-select" required>
+                        <option value="">-- Select Patient --</option>
+                        @foreach (var p in ViewBag.Patients)
+                        {
+                            <option value="@p.Id">@p.FullName — @p.PatientNumber</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Medical Record *</label>
+                    <select name="MedicalRecordId" class="form-select" required>
+                        <option value="">-- Select Record --</option>
+                        @foreach (var r in ViewBag.MedicalRecords)
+                        {
+                            <option value="@r.Id">
+                                @r.Patient.FullName — @r.VisitDate.ToString("dd MMM yyyy")
+                                — @r.Diagnosis
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Test Name *</label>
+                    <input type="text" name="TestName" class="form-control"
+                           placeholder="e.g. Full Blood Count, Malaria Test" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Result *</label>
+                    <input type="text" name="Result" class="form-control"
+                           placeholder="e.g. Positive, 120mg/dL" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Normal Range</label>
+                    <input type="text" name="NormalRange" class="form-control"
+                           placeholder="e.g. 70–100mg/dL" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="Status" class="form-select">
+                        <option value="Pending">Pending</option>
+                        <option value="Ready">Ready</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn text-white px-4" style="background:#009688;">
+                    <i class="fas fa-save me-1"></i> Save Result
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

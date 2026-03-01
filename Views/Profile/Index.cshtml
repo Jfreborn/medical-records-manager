@@ -1,0 +1,195 @@
+﻿@model MedicalRecordsManager.Models.ApplicationUser
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="row g-4">
+
+    <!-- Profile Card -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body text-center p-4">
+
+                <!-- Avatar -->
+                <div class="rounded-circle mx-auto d-flex align-items-center
+                            justify-content-center mb-3"
+                     style="width:90px; height:90px;
+                            background:@(Model.UserRole == "Admin"  ? "#FFEBEE" :
+                                                              Model.UserRole == "Doctor" ? "#E3F2FD" : "#E8F5E9");">
+                    <i class="fas fa-@(Model.UserRole == "Admin"  ? "user-shield" :
+                                                              Model.UserRole == "Doctor" ? "user-md" :
+                                                              "user-nurse") fa-2x"
+                       style="color:@(Model.UserRole == "Admin"  ? "#B71C1C" :
+                                                             Model.UserRole == "Doctor" ? "#1565C0" : "#2E7D32");"></i>
+                </div>
+
+                <h5 class="fw-bold mb-1">@Model.FullName</h5>
+                <span class="badge mb-2"
+                      style="background:@(Model.UserRole == "Admin"  ? "#B71C1C" :
+                                                                Model.UserRole == "Doctor" ? "#1565C0" : "#2E7D32")">
+                    @Model.UserRole
+                </span>
+
+                <hr />
+
+                <div class="text-start">
+                    <p class="mb-2">
+                        <i class="fas fa-envelope me-2 text-muted"></i>
+                        @Model.Email
+                    </p>
+                    @if (!string.IsNullOrEmpty(Model.Department))
+                    {
+                        <p class="mb-2">
+                            <i class="fas fa-building me-2 text-muted"></i>
+                            @Model.Department
+                        </p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Specialization))
+                    {
+                        <p class="mb-2">
+                            <i class="fas fa-stethoscope me-2 text-muted"></i>
+                            @Model.Specialization
+                        </p>
+                    }
+                    <p class="mb-0">
+                        <i class="fas fa-circle me-2"
+                           style="color:@(Model.IsActive ? "#2E7D32" : "#B71C1C"); font-size:10px;"></i>
+                        @(Model.IsActive ? "Active Account" : "Inactive Account")
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-md-8">
+
+        <!-- Update Info -->
+        <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-header text-white fw-bold py-3" style="background:#006064;">
+                <i class="fas fa-user-edit me-2"></i> Update Profile Info
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="UpdateInfo" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Full Name *</label>
+                            <input type="text" name="FullName"
+                                   value="@Model.FullName"
+                                   class="form-control" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" value="@Model.Email"
+                                   class="form-control" readonly
+                                   style="background:#f8f9fa;" />
+                            <small class="text-muted">Email cannot be changed</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Department</label>
+                            <input type="text" name="Department"
+                                   value="@Model.Department"
+                                   class="form-control"
+                                   placeholder="e.g. OPD, ICU, Surgery" />
+                        </div>
+                        @if (Model.UserRole == "Doctor")
+                        {
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Specialization</label>
+                                <input type="text" name="Specialization"
+                                       value="@Model.Specialization"
+                                       class="form-control"
+                                       placeholder="e.g. Cardiology, General Medicine" />
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn text-white px-4"
+                                style="background:#009688;">
+                            <i class="fas fa-save me-1"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header text-white fw-bold py-3" style="background:#37474F;">
+                <i class="fas fa-lock me-2"></i> Change Password
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="ChangePassword" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Current Password *</label>
+                            <input type="password" name="CurrentPassword"
+                                   class="form-control"
+                                   placeholder="Enter current password" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">New Password *</label>
+                            <input type="password" name="NewPassword"
+                                   class="form-control" id="newPass"
+                                   placeholder="Min 8 chars, 1 uppercase, 1 number"
+                                   required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Confirm New Password *</label>
+                            <input type="password" name="ConfirmPassword"
+                                   class="form-control" id="confirmPass"
+                                   placeholder="Repeat new password"
+                                   required />
+                        </div>
+
+                        <!-- Password match indicator -->
+                        <div class="col-12" id="matchMsg" style="display:none;">
+                            <small id="matchText"></small>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn text-white px-4"
+                                style="background:#37474F;">
+                            <i class="fas fa-key me-1"></i> Change Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Live password match check
+        const newPass     = document.getElementById('newPass');
+        const confirmPass = document.getElementById('confirmPass');
+        const matchMsg    = document.getElementById('matchMsg');
+        const matchText   = document.getElementById('matchText');
+
+        function checkMatch() {
+            if (confirmPass.value.length === 0) {
+                matchMsg.style.display = 'none';
+                return;
+            }
+            matchMsg.style.display = 'block';
+            if (newPass.value === confirmPass.value) {
+                matchText.textContent = '✅ Passwords match';
+                matchText.style.color = '#2E7D32';
+            } else {
+                matchText.textContent = '❌ Passwords do not match';
+                matchText.style.color = '#B71C1C';
+            }
+        }
+
+        newPass.addEventListener('input', checkMatch);
+        confirmPass.addEventListener('input', checkMatch);
+    </script>
+}

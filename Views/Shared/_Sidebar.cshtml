@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MedicalRecordsManager.Models.ApplicationUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <nav class="d-flex flex-column text-white"
+         style="width:250px; min-height:100vh; background:#1A232F; position:sticky; top:0;">
+
+        <!-- Logo -->
+        <div class="p-3 text-center border-bottom border-secondary">
+            <h5 class="mb-0">
+                <i class="fas fa-heartbeat me-2" style="color:#009688;"></i>
+                <span style="color:#009688;">Med</span>Records
+            </h5>
+            <small class="text-muted">Management System</small>
+        </div>
+
+        <!-- Links -->
+        <div class="p-2 flex-grow-1">
+            <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+               asp-controller="Home" asp-action="Index">
+                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+            </a>
+            <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+               asp-controller="Patients" asp-action="Index">
+                <i class="fas fa-user-injured me-2"></i> Patients
+            </a>
+            <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+               asp-controller="Appointments" asp-action="Index">
+                <i class="fas fa-calendar-check me-2"></i> Appointments
+            </a>
+            <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+               asp-controller="MedicalRecords" asp-action="Index">
+                <i class="fas fa-file-medical me-2"></i> Medical Records
+            </a>
+            <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+               asp-controller="Prescriptions" asp-action="Index">
+                <i class="fas fa-pills me-2"></i> Prescriptions
+            </a>
+            <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+               asp-controller="LabResults" asp-action="Index">
+                <i class="fas fa-flask me-2"></i> Lab Results
+            </a>
+            <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+               asp-controller="Payments" asp-action="Index">
+                <i class="fas fa-money-bill-wave me-2"></i> Payments
+            </a>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <hr class="border-secondary" />
+                <a class="nav-link text-warning rounded px-3 py-2 mb-1 sidebar-link"
+                   asp-controller="Users" asp-action="Index">
+                    <i class="fas fa-users-cog me-2"></i> Manage Users
+                </a>
+            }
+
+            <hr class="border-secondary" />
+            <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+               asp-controller="Profile" asp-action="Index">
+                <i class="fas fa-user-circle me-2"></i> My Profile
+            </a>
+        </div>
+
+    </nav>
+}

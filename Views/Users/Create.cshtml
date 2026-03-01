@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Add New User";
+}
+
+<div class="card shadow-sm border-0 rounded-3" style="max-width:650px;">
+    <div class="card-header text-white fw-bold py-3" style="background:#006064;">
+        <i class="fas fa-user-plus me-2"></i> Add New User
+    </div>
+    <div class="card-body p-4">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            @if (ViewData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>@ViewData["Error"]
+                </div>
+            }
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Full Name *</label>
+                    <input type="text" name="FullName" class="form-control"
+                           placeholder="e.g. Dr. John Smith" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email *</label>
+                    <input type="email" name="Email" class="form-control"
+                           placeholder="user@hospital.com" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Role *</label>
+                    <select name="UserRole" class="form-select" required
+                            onchange="toggleDoctorFields(this.value)">
+                        <option value="">-- Select Role --</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Doctor">Doctor</option>
+                        <option value="Nurse">Nurse</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Department</label>
+                    <input type="text" name="Department" class="form-control"
+                           placeholder="e.g. OPD, ICU, Surgery" />
+                </div>
+                <div class="col-md-6" id="specializationField" style="display:none;">
+                    <label class="form-label fw-semibold">Specialization</label>
+                    <input type="text" name="Specialization" class="form-control"
+                           placeholder="e.g. General Medicine, Cardiology" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Password *</label>
+                    <input type="password" name="Password" class="form-control"
+                           placeholder="Min 8 chars, 1 uppercase, 1 number" required />
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn text-white px-4" style="background:#009688;">
+                    <i class="fas fa-save me-1"></i> Create User
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleDoctorFields(role) {
+            const field = document.getElementById('specializationField');
+            field.style.display = role === 'Doctor' ? 'block' : 'none';
+        }
+    </script>
+}

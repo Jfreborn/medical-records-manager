@@ -1,0 +1,91 @@
+﻿@model MedicalRecordsManager.Models.Patient
+@{
+    ViewData["Title"] = "New Patient";
+}
+
+<div class="card shadow-sm border-0 rounded-3" style="max-width:800px;">
+    <div class="card-header text-white fw-bold py-3" style="background:#006064;">
+        <i class="fas fa-user-plus me-2"></i> Register New Patient
+    </div>
+    <div class="card-body p-4">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">First Name *</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Last Name *</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Date of Birth *</label>
+                    <input asp-for="DateOfBirth" type="date" class="form-control" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Gender *</label>
+                    <select asp-for="Gender" class="form-select">
+                        <option value="">-- Select --</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Blood Group</label>
+                    <select asp-for="BloodGroup" class="form-select">
+                        <option value="">-- Select --</option>
+                        <option>A+</option>
+                        <option>A-</option>
+                        <option>B+</option>
+                        <option>B-</option>
+                        <option>AB+</option>
+                        <option>AB-</option>
+                        <option>O+</option>
+                        <option>O-</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Phone Number</label>
+                    <input asp-for="PhoneNumber" class="form-control" placeholder="e.g. 08012345678" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="patient@email.com" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Emergency Contact Name</label>
+                    <input asp-for="EmergencyContactName" class="form-control" placeholder="Contact name" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Emergency Contact Phone</label>
+                    <input asp-for="EmergencyContactPhone" class="form-control" placeholder="Contact phone" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Allergies</label>
+                    <input asp-for="Allergies" class="form-control" placeholder="e.g. Penicillin, Peanuts" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Address</label>
+                    <textarea asp-for="Address" class="form-control" rows="2"
+                              placeholder="Enter full address"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn text-white px-4" style="background:#009688;">
+                    <i class="fas fa-save me-1"></i> Register Patient
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

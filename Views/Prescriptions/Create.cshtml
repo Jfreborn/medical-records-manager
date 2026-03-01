@@ -1,0 +1,92 @@
+﻿@{
+    ViewData["Title"] = "New Prescription";
+}
+
+<div class="card shadow-sm border-0 rounded-3" style="max-width:700px;">
+    <div class="card-header text-white fw-bold py-3" style="background:#006064;">
+        <i class="fas fa-pills me-2"></i> Write Prescription
+    </div>
+    <div class="card-body p-4">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Patient *</label>
+                    <select name="PatientId" class="form-select" required>
+                        <option value="">-- Select Patient --</option>
+                        @foreach (var p in ViewBag.Patients)
+                        {
+                            <option value="@p.Id">@p.FullName — @p.PatientNumber</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Doctor *</label>
+                    <select name="DoctorId" class="form-select" required>
+                        <option value="">-- Select Doctor --</option>
+                        @foreach (var d in ViewBag.Doctors)
+                        {
+                            <option value="@d.Id">@d.FullName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Medical Record *</label>
+                    <select name="MedicalRecordId" class="form-select" required>
+                        <option value="">-- Select Record --</option>
+                        @foreach (var r in ViewBag.MedicalRecords)
+                        {
+                            <option value="@r.Id">
+                                @r.Patient.FullName — @r.VisitDate.ToString("dd MMM yyyy")
+                                — @r.Diagnosis
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Medicine Name *</label>
+                    <input type="text" name="MedicineName" class="form-control"
+                           placeholder="e.g. Paracetamol, Amoxicillin" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Dosage *</label>
+                    <input type="text" name="Dosage" class="form-control"
+                           placeholder="e.g. 500mg, 250mg" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Frequency *</label>
+                    <select name="Frequency" class="form-select" required>
+                        <option value="">-- Select --</option>
+                        <option>Once daily</option>
+                        <option>Twice daily</option>
+                        <option>Three times daily</option>
+                        <option>Four times daily</option>
+                        <option>Every 8 hours</option>
+                        <option>Every 12 hours</option>
+                        <option>As needed</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Duration (Days) *</label>
+                    <input type="number" name="DurationDays" class="form-control"
+                           placeholder="e.g. 7" min="1" max="365" required />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Instructions</label>
+                    <textarea name="Instructions" class="form-control" rows="2"
+                              placeholder="e.g. Take after meals, Avoid alcohol..."></textarea>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn text-white px-4" style="background:#009688;">
+                    <i class="fas fa-save me-1"></i> Save Prescription
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

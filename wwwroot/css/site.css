@@ -1,0 +1,29 @@
+:root {
+    --teal: #009688;
+    --teal-dark: #006064;
+}
+
+.sidebar-link:hover {
+    background: rgba(255,255,255,0.08) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 0.2rem rgba(0,150,136,0.25);
+}
+
+.table thead th {
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+}
+
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1) !important;
+    }

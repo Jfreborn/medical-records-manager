@@ -1,0 +1,114 @@
+﻿@model MedicalRecordsManager.Models.Patient
+@{
+    ViewData["Title"] = "Patient Details";
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-arrow-left me-1"></i> Back to Patients
+    </a>
+    <a asp-action="Edit" asp-route-id="@Model.Id"
+       class="btn btn-sm btn-outline-warning ms-2">
+        <i class="fas fa-edit me-1"></i> Edit
+    </a>
+</div>
+
+<div class="row g-4">
+    <!-- Patient Info Card -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body text-center p-4">
+                <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3"
+                     style="width:80px;height:80px;background:#E0F2F1;">
+                    <i class="fas fa-user fa-2x" style="color:#009688;"></i>
+                </div>
+                <h5 class="fw-bold">@Model.FullName</h5>
+                <span class="badge text-white" style="background:#009688;">
+                    @Model.PatientNumber
+                </span>
+                <hr />
+                <div class="text-start">
+                    <p class="mb-2"><i class="fas fa-venus-mars me-2 text-muted"></i>@Model.Gender</p>
+                    <p class="mb-2"><i class="fas fa-tint me-2 text-muted"></i>@Model.BloodGroup</p>
+                    <p class="mb-2"><i class="fas fa-phone me-2 text-muted"></i>@Model.PhoneNumber</p>
+                    <p class="mb-2"><i class="fas fa-envelope me-2 text-muted"></i>@Model.Email</p>
+                    <p class="mb-2"><i class="fas fa-map-marker-alt me-2 text-muted"></i>@Model.Address</p>
+                    @if (!string.IsNullOrEmpty(Model.Allergies))
+                    {
+                        <p class="mb-0">
+                            <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                            <strong>Allergies:</strong> @Model.Allergies
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointments -->
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm rounded-3 mb-3">
+            <div class="card-header bg-white fw-bold">
+                <i class="fas fa-calendar-check me-2" style="color:#009688;"></i>
+                Appointments (@Model.Appointments.Count)
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light">
+                        <tr><th>Date</th><th>Doctor</th><th>Reason</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var a in Model.Appointments.OrderByDescending(x => x.AppointmentDate))
+                        {
+                            <tr>
+                                <td>@a.AppointmentDate.ToString("dd MMM yyyy")</td>
+                                <td>@a.Doctor.FullName</td>
+                                <td>@a.Reason</td>
+                                <td>
+                                    <span class="badge"
+                                          style="background:@(a.Status == "Completed" ? "#2E7D32" :
+                                                                                                        a.Status == "Cancelled" ? "#C62828" : "#1565C0")">
+                                        @a.Status
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Appointments.Any())
+                        {
+                            <tr><td colspan="4" class="text-muted text-center py-2">No appointments</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Medical Records -->
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white fw-bold">
+                <i class="fas fa-file-medical me-2" style="color:#009688;"></i>
+                Medical Records (@Model.MedicalRecords.Count)
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light">
+                        <tr><th>Date</th><th>Doctor</th><th>Diagnosis</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.MedicalRecords.OrderByDescending(x => x.VisitDate))
+                        {
+                            <tr>
+                                <td>@r.VisitDate.ToString("dd MMM yyyy")</td>
+                                <td>@r.Doctor.FullName</td>
+                                <td>@r.Diagnosis</td>
+                            </tr>
+                        }
+                        @if (!Model.MedicalRecords.Any())
+                        {
+                            <tr><td colspan="3" class="text-muted text-center py-2">No records</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
