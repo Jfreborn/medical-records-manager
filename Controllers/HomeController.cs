@@ -14,7 +14,7 @@ namespace MedicalRecordsManager.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var today = DateTime.Today;
+            var today = DateTime.UtcNow.Date;
 
             ViewBag.TotalPatients = await _db.Patients
                                             .CountAsync(p => p.IsActive);
