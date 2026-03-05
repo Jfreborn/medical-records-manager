@@ -36,8 +36,10 @@ namespace MedicalRecordsManager.Controllers
         [Authorize(Roles = "Nurse")]
         public async Task<IActionResult> Nurse()
         {
+            var today = DateTime.UtcNow.Date;
+
             ViewBag.TodayAppointments = await _db.Appointments
-                .Where(a => a.AppointmentDate.Date == DateTime.Today)
+                .Where(a => a.AppointmentDate.Date == today)
                 .CountAsync();
 
             ViewBag.ActivePatients = await _db.Patients
