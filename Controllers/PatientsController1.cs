@@ -51,10 +51,15 @@ namespace MedicalRecordsManager.Controllers
         public IActionResult Create() => View();
 
         // POST: /Patients/Create
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Patient model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+                return View(model);
+
+            // Convert DateOfBirth to UTC for PostgreSQL
+            model.DateOfBirth = DateTime.SpecifyKind(model.DateOfBirth, DateTimeKind.Utc);
 
             var count = await _db.Patients.CountAsync() + 1;
             model.PatientNumber = $"PAT-{count:D4}";
@@ -80,6 +85,8 @@ namespace MedicalRecordsManager.Controllers
         {
             if (id != model.Id) return BadRequest();
             if (!ModelState.IsValid) return View(model);
+
+            model.DateOfBirth = DateTime.SpecifyKind(model.DateOfBirth, DateTimeKind.Utc);
 
             _db.Patients.Update(model);
             await _db.SaveChangesAsync();
