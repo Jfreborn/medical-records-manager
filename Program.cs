@@ -3,9 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using MedicalRecordsManager.Data;
 using MedicalRecordsManager.Models;
 
+// Permanent PostgreSQL DateTime fix
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
-// ── 1. Database ──────────────────────────────────────────────
+// Database connection
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
 string connectionString;
@@ -23,6 +26,7 @@ if (!string.IsNullOrWhiteSpace(databaseUrl) && databaseUrl.StartsWith("postgres"
         ";Username=" + userInfo[0] +
         ";Password=" + userInfo[1] +
         ";SSL Mode=Require;Trust Server Certificate=true";
+
 }
 else
 {
@@ -30,8 +34,9 @@ else
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
-// ── 2. Identity ──────────────────────────────────────────────
+options.UseNpgsql(connectionString));
+
+// Identity configuration
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -40,10 +45,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.SignIn.RequireConfirmedAccount = false;
 })
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
-// ── 3. Cookie Settings ───────────────────────────────────────
+// Cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -53,21 +58,23 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-// ── 4. MVC ───────────────────────────────────────────────────
+// MVC
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// Apply migrations automatically
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
 }
 
+// Render port binding
 var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
 app.Urls.Add($"http://*:{port}");
 
-// ── 5. Seed Roles and Default Users ─────────────────────────
+// Seed roles and users
 using (var scope = app.Services.CreateScope())
 {
     try
@@ -81,7 +88,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// ── 6. Middleware Pipeline ───────────────────────────────────
+// Middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -91,11 +98,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthentication();   // Must be BEFORE UseAuthorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+name: "default",
+pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
