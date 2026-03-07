@@ -24,10 +24,13 @@
             </a>
 
             <!-- Clinical Section -->
-            <small class="px-3 mt-3 mb-2 d-block"
-                   style="color:#8FA6BF; font-size:11px; letter-spacing:1px;">
-                CLINICAL
-            </small>
+            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+{
+    <small class="px-3 mt-3 mb-2 d-block"
+           style="color:#8FA6BF; font-size:11px; letter-spacing:1px;">
+        CLINICAL
+    </small>
+}
             
             @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
             {
