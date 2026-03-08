@@ -16,7 +16,7 @@ namespace MedicalRecordsManager.Controllers
         // GET: /Patients
         public async Task<IActionResult> Index(string? search)
         {
-            var query = _db.Patients.Where(p => p.IsActive).AsQueryable();
+            var query = _db.Patients.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search))
             {

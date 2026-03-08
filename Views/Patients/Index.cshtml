@@ -28,6 +28,8 @@
                     <th>Blood Group</th>
                     <th>Phone</th>
                     <th>Registered</th>
+                    <th>Status</th>
+                    <th>Deleted At</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -45,6 +47,20 @@
                         <td>@p.BloodGroup</td>
                         <td>@p.PhoneNumber</td>
                         <td>@p.RegisteredAt.ToString("dd MMM yyyy")</td>
+
+                        <td>
+                            @if (p.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactive</span>
+                            }
+                        </td>
+
+                        <td>
+
                         <td>
                             <a asp-action="Details" asp-route-id="@p.Id"
                                class="btn btn-sm btn-outline-info">
