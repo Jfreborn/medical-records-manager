@@ -16,7 +16,9 @@ namespace MedicalRecordsManager.Controllers
         // GET: /Patients
         public async Task<IActionResult> Index(string? search)
         {
-            var query = _db.Patients.AsQueryable();
+            var query = _db.Patients
+            .Where(p => p.IsActive)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -100,13 +102,47 @@ namespace MedicalRecordsManager.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var patient = await _db.Patients.FindAsync(id);
+
             if (patient != null)
             {
                 patient.IsActive = false;
+                patient.DeletedAt = DateTime.UtcNow;
+
                 await _db.SaveChangesAsync();
+
                 TempData["Success"] = "Patient removed.";
             }
+
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Archived()
+        {
+            var archivedPatients = await _db.Patients
+                .Where(p => !p.IsActive)
+                .OrderByDescending(p => p.DeletedAt)
+                .ToListAsync();
+
+            return View(archivedPatients);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Restore(int id)
+        {
+            var patient = await _db.Patients.FindAsync(id);
+
+            if (patient != null)
+            {
+                patient.IsActive = true;
+                patient.DeletedAt = null;
+
+                await _db.SaveChangesAsync();
+
+                TempData["Success"] = "Patient restored successfully.";
+            }
+
+            return RedirectToAction("Archived");
         }
     }
 }
