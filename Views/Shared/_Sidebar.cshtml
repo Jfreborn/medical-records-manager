@@ -40,6 +40,14 @@
                 </a>
             }
 
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+                   asp-controller="Patients" asp-action="Archived">
+                    <i class="fas fa-archive me-2"></i> Archived Patients
+                </a>
+            }
+
             @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
             {
                 <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
