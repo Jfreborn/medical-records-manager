@@ -15,68 +15,60 @@
             <small class="text-muted">Management System</small>
         </div>
 
-        <!-- Links -->
         <div class="p-2 flex-grow-1">
 
+            <!-- Dashboard -->
             <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
                asp-controller="Home" asp-action="Index">
                 <i class="fas fa-tachometer-alt me-2"></i> Dashboard
             </a>
 
-            <!-- Clinical Section -->
-            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
-{
-    <small class="px-3 mt-3 mb-2 d-block"
-           style="color:#8FA6BF; font-size:11px; letter-spacing:1px;">
-        CLINICAL
-    </small>
-}
-            
+            <!-- CLINICAL SECTION -->
             @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
             {
+                <small class="px-3 mt-3 mb-2 d-block"
+                       style="color:#8FA6BF; font-size:11px; letter-spacing:1px;">
+                    CLINICAL
+                </small>
+
                 <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
                    asp-controller="Patients" asp-action="Index">
                     <i class="fas fa-user-injured me-2"></i> Patients
                 </a>
-            }
 
-            @if (User.IsInRole("Admin"))
-            {
-                <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
-                   asp-controller="Patients" asp-action="Archived">
-                    <i class="fas fa-archive me-2"></i> Archived Patients
-                </a>
-            }
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+                       asp-controller="Patients" asp-action="Archived">
+                        <i class="fas fa-archive me-2"></i> Archived Patients
+                    </a>
+                }
 
-            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
-            {
                 <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
                    asp-controller="Appointments" asp-action="Index">
                     <i class="fas fa-calendar-check me-2"></i> Appointments
                 </a>
-            }
 
-            @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
-            {
-                <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
-                   asp-controller="MedicalRecords" asp-action="Index">
-                    <i class="fas fa-file-medical me-2"></i> Medical Records
-                </a>
+                @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
+                {
+                    <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+                       asp-controller="MedicalRecords" asp-action="Index">
+                        <i class="fas fa-file-medical me-2"></i> Medical Records
+                    </a>
 
-                <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
-                   asp-controller="Prescriptions" asp-action="Index">
-                    <i class="fas fa-pills me-2"></i> Prescriptions
-                </a>
-            }
+                    <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
+                       asp-controller="Prescriptions" asp-action="Index">
+                        <i class="fas fa-pills me-2"></i> Prescriptions
+                    </a>
+                }
 
-            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
-            {
                 <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
                    asp-controller="LabResults" asp-action="Index">
                     <i class="fas fa-flask me-2"></i> Lab Results
                 </a>
             }
 
+            <!-- FINANCE SECTION -->
             @if (User.IsInRole("Admin") || User.IsInRole("Accountant"))
             {
                 <hr class="border-secondary" />
@@ -92,12 +84,14 @@
                 </a>
             }
 
+            <!-- ADMIN SECTION -->
             @if (User.IsInRole("Admin"))
             {
                 <hr class="border-secondary" />
 
-                <!-- Administration Section -->
-                <small class="text-uppercase text-muted px-3">Administration</small>
+                <small class="text-uppercase text-muted px-3">
+                    Administration
+                </small>
 
                 <a class="nav-link text-warning rounded px-3 py-2 mb-1 sidebar-link"
                    asp-controller="Users" asp-action="Index">
@@ -107,6 +101,7 @@
 
             <hr class="border-secondary" />
 
+            <!-- PROFILE -->
             <a class="nav-link text-white rounded px-3 py-2 mb-1 sidebar-link"
                asp-controller="Profile" asp-action="Index">
                 <i class="fas fa-user-circle me-2"></i> My Profile
