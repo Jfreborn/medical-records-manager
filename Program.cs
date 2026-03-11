@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MedicalRecordsManager.Data;
@@ -70,10 +71,12 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-// Render port binding
-var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
-app.Urls.Add($"http://*:{port}");
-
+// Render port binding (ONLY in production)
+if (!app.Environment.IsDevelopment())
+{
+    var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
+    app.Urls.Add($"http://*:{port}");
+}
 // Seed roles and users
 using (var scope = app.Services.CreateScope())
 {
@@ -95,6 +98,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

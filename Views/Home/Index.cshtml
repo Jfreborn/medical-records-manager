@@ -85,8 +85,8 @@
                 {
                     <tr>
                         <td>@a.AppointmentTime.ToString(@"hh\:mm")</td>
-                        <td class="fw-semibold">@a.Patient.FullName</td>
-                        <td>@a.Doctor.FullName</td>
+                        <td class="fw-semibold">@a.Patient?.FullName</td>
+                        <td>@a.Doctor?.FullName</td>
                         <td>@a.Reason</td>
                         <td>
                             <span class="badge"
