@@ -6,7 +6,7 @@ using MedicalRecordsManager.Models;
 
 namespace MedicalRecordsManager.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, Doctor, Nurse")]
     public class PatientsController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -116,6 +116,8 @@ namespace MedicalRecordsManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Add it here:
+        [Route("archived")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Archived()
         {

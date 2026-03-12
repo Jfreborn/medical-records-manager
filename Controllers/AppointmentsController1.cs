@@ -7,7 +7,7 @@ using MedicalRecordsManager.Models;
 
 namespace MedicalRecordsManager.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, Doctor, Nurse")]
     public class AppointmentsController : Controller
     {
         private readonly ApplicationDbContext _db;

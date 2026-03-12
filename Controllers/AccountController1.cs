@@ -71,6 +71,10 @@ namespace MedicalRecordsManager.Controllers
             return RedirectToAction("Login");
         }
 
-        public IActionResult AccessDenied() => View();
+        // Remove the "Forbidden" string so it looks for AccessDenied.cshtml
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
